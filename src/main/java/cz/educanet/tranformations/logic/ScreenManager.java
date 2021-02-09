@@ -52,16 +52,16 @@ public class ScreenManager {
             for (Coordinate point : selectedPoints) {
                     points.add(point);
             }
-            Coordinate a = points.get(0);
-            Coordinate b = points.get(1);
-            Coordinate c = points.get(2);
+            Coordinate v0 = points.get(0);
+            Coordinate v1 = points.get(1);
+            Coordinate v2 = points.get(2);
 
-            int aDet = ((coordinate.getX() - c.getX()) * (b.getY() - c.getY())) + ((coordinate.getY() - c.getY()) * (c.getX() - b.getX()));
-            int bDet = ((coordinate.getX() - c.getX()) * (c.getY() - a.getY())) + ((coordinate.getY() - c.getY()) * (a.getX() - c.getX()));
-            int cD = orient2d(a, b, c) - aDet - bDet;
+            int aDet = ((coordinate.getX() - v2.getX()) * (v1.getY() - v2.getY())) + ((coordinate.getY() - v2.getY()) * (v2.getX() - v1.getX()));
+            int bDet = ((coordinate.getX() - v2.getX()) * (v2.getY() - v0.getY())) + ((coordinate.getY() - v2.getY()) * (v0.getX() - v2.getX()));
+            int cD = orient2d(v0, v1, v2) - aDet - bDet;
 
-            int min = Math.min(orient2d(a, b, c), 0);
-            int max = Math.max(orient2d(a, b, c), 0);
+            int min = Math.min(orient2d(v0, v1, v2), 0);
+            int max = Math.max(orient2d(v0, v1, v2), 0);
 
             if (aDet < min || aDet > max){
                 return false;
