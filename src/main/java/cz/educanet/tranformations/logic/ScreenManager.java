@@ -3,6 +3,7 @@ package cz.educanet.tranformations.logic;
 
 import cz.educanet.tranformations.logic.models.Coordinate;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,12 +37,41 @@ public class ScreenManager {
         return selectedPoints;
     }
 
-
-    private boolean check(int u1, int u2, int u3, int a1, int a2, int b1, int b2) {
-        int x = (u1 * a1 + u2 * a2 + u3);
-        int y = (u1 * b1 + u2 * b2 + u3);
-        return (x * y > 0);
+    public int orient2d(Coordinate a, Coordinate b, Coordinate c)
+    {
+        return (b.getY() - c.getY()) * (a.getX() - c.getX()) - (c.getX() - b.getX()) * (c.getY() - a.getY());
     }
 
+    public boolean isFilledIn(Coordinate coordinate) {
+        if (selectedPoints.size() != 3) {
+            return false;
+
+        } else {
+            ArrayList<Coordinate> points = new ArrayList<>();
+
+            for (Coordinate point : selectedPoints) {
+                    points.add(point);
+            }
+            Coordinate a = points.get(0);
+            Coordinate b = points.get(1);
+            Coordinate c = points.get(2);
+
+            int aDet = ((coordinate.getX() - c.getX()) * (b.getY() - c.getY())) + ((coordinate.getY() - c.getY()) * (c.getX() - b.getX()));
+            int bDet = ((coordinate.getX() - c.getX()) * (c.getY() - a.getY())) + ((coordinate.getY() - c.getY()) * (a.getX() - c.getX()));
+            int cD = orient2d(a, b, c) - aDet - bDet;
+
+            int min = Math.min(orient2d(a, b, c), 0);
+            int max = Math.max(orient2d(a, b, c), 0);
+
+            if (aDet < min || aDet > max){
+                return false;
+            }else if (bDet < min || bDet > max){
+                return false;
+            }else if (cD < min || cD > max){
+                return false;
+            }
+            return true;
+        }
+    }
 
 }
